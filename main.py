@@ -43,9 +43,13 @@ with open('input.txt', 'r', encoding='utf-8') as file:
             q["answer"] = [data_list[curr_index + 13]]
         q["feedback"] = [""]
         q["weight"] = 1000
-        q["tag"] = ["中文", "卷一", ""]
+        q["tag"] = ["中文", "卷一", "New"]
         output.append(q)
     
-    print(json.dumps(output, ensure_ascii=False))
-    pyperclip.copy(json.dumps(output, ensure_ascii=False))
+    out_text = json.dumps(output, ensure_ascii=False)
+
+    out_text = out_text.replace("\\\\n", "\\n")
+
+    print(out_text)
+    pyperclip.copy(out_text)
         
