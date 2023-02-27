@@ -9,11 +9,32 @@ def getAnswer(answer_data):
     return answers
 
 with open('input.txt', 'r', encoding='utf-8') as file:
-    # * Note! This ANSWER_TEXT component is dependent on your quizizz language
-    ANSWER_TEXT = "解答"
-    
     data = file.read()
 
+    def FindAnswerText(raw):
+        search = raw.split("\n")
+        search.reverse()
+
+        def isAnswer(sus):
+            if len(sus) > 1:
+                return False
+            ascii = ord(sus) - ord('a')
+
+            # Quizizz can only have up to 5 answers
+            return 0 <= ascii <= 4
+
+        def isQuestionID(sus):
+            if sus[-1] != '.':
+                return False
+            return sus[:-1].isnumeric()
+
+        for item in search:
+            if not(isAnswer(item) or isQuestionID(item)):
+                return item
+        raise Exception("Sorry, no answer_text is found.")
+    
+    # * Note! This ANSWER_TEXT component is dependent on your quizizz language
+    ANSWER_TEXT = FindAnswerText(data)
 
     # Obtain the answer data
     answer_data = data[data.rfind(ANSWER_TEXT):].split("\n")[1:]
